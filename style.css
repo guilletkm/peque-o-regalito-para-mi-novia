@@ -383,28 +383,34 @@ body {
 /* ========================================== */
 
 @media (max-width: 768px) {
-    /* 1. Da espacio "invisible" al final de la página para poder bajar más */
     body {
-        padding-bottom: 130px; 
+        padding-bottom: 150px; /* Un poco más de espacio por si el reproductor crece */
     }
 
-    /* 2. Centra el reproductor y lo hace más delgado en móviles */
     .music-player {
         bottom: 15px;
         right: 50%;
         transform: translateX(50%);
         width: 90%; 
         min-width: auto;
-        padding: 10px 15px;
+        padding: 15px;
     }
 
-    /* 3. Mantiene el centrado cuando lo tocas */
     .music-player:hover {
         transform: translateX(50%) translateY(-2px);
     }
     
-    /* 4. Achica un poco el slider de volumen para ganar espacio */
+    /* Permite que el volumen baje a otra línea si la pantalla es muy pequeña */
+    .music-controls {
+        flex-wrap: wrap; 
+        gap: 10px;
+    }
+
+    /* Volumen mucho más cómodo para el dedo */
     #volume-slider {
-        width: 40px;
+        width: 100px; /* Más del doble de ancho */
+        height: 6px;  /* Más gordito para tocarlo fácil */
+        margin-left: 0;
+        margin-top: 5px;
     }
 }
