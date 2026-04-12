@@ -142,16 +142,16 @@ if(audio) {
         nextBtn.click();
     });
 
-    // --- Lógica de la Barra de Progreso (COMPATIBLE CON IPHONE) ---
+    // --- Lógica de la Barra de Progreso (Bala de Plata para IPHONE) ---
     
-    let isDragging = false; // Variable para saber si estás tocando la barra
+    let isDragging = false;
 
     audio.addEventListener('loadedmetadata', () => {
         progressBar.max = audio.duration;
         totalTimeEl.innerText = formatearTiempo(audio.duration);
     });
 
-    // Mientras reproduce, solo se mueve sola si NO tienes el dedo puesto
+    // Solo avanza sola si NO tienes el dedo puesto
     audio.addEventListener('timeupdate', () => {
         if (!isDragging) {
             progressBar.value = audio.currentTime;
@@ -159,17 +159,25 @@ if(audio) {
         }
     });
 
-    // Cuando pones el dedo y arrastras (Actualiza solo los números, no la música aún)
+    // Cuando tocas y arrastras
     progressBar.addEventListener('input', () => {
         isDragging = true;
         currentTimeEl.innerText = formatearTiempo(progressBar.value);
     });
 
-    // Cuando LEVANTAS el dedo (Aquí recién cambiamos el minuto de la canción)
-    progressBar.addEventListener('change', () => {
-        audio.currentTime = progressBar.value;
-        isDragging = false;
-    });
+    // LA SOLUCIÓN: Una función estricta para cuando sueltas el dedo
+    const soltarBarra = () => {
+        if (isDragging) {
+            // El "Number()" es vital porque el iPhone a veces lo lee como texto y se traba
+            audio.currentTime = Number(progressBar.value); 
+            isDragging = false;
+        }
+    };
+
+    // Le disparamos la función con todos los métodos posibles para que el iPhone no se escape
+    progressBar.addEventListener('change', soltarBarra);
+    progressBar.addEventListener('touchend', soltarBarra); // Específico para pantallas táctiles
+    progressBar.addEventListener('mouseup', soltarBarra);  // Para el mouse en PC
 }
 
 // ==========================================
