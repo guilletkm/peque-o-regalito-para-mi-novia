@@ -69,7 +69,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 // ==========================================
-// 4. REPRODUCTOR DE MÚSICA AVANZADO (CON PROGRESO)
+// 4. REPRODUCTOR DE MÚSICA AVANZADO (Fijo para iPhone)
 // ==========================================
 const canciones = [
     "tu-cancion.mp3",
@@ -89,8 +89,16 @@ const currentTimeEl = document.getElementById('current-time');
 const totalTimeEl = document.getElementById('total-time');
 const volumeSlider = document.getElementById('volume-slider');
 
-// Función para formatear los segundos a "Minutos:Segundos" (ej. 1:45)
+// Detectar si es un iPhone/iPad (iOS)
+const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+// Si es iOS, ocultamos el deslizador de volumen porque Apple no permite usarlo
+if (esIOS && volumeSlider) {
+    volumeSlider.style.display = 'none';
+}
+
 function formatearTiempo(segundos) {
+    if (isNaN(segundos)) return "0:00";
     const min = Math.floor(segundos / 60);
     const seg = Math.floor(segundos % 60);
     return `${min}:${seg < 10 ? '0' : ''}${seg}`;
@@ -98,7 +106,8 @@ function formatearTiempo(segundos) {
 
 if(audio) {
     audio.src = canciones[indiceActual];
-    audio.volume = volumeSlider.value;
+    // Solo aplicar volumen si NO es iOS
+    if (!esIOS) audio.volume = volumeSlider.value;
 
     // --- Controles Básicos ---
     musicBtn.addEventListener('click', () => {
@@ -126,30 +135,40 @@ if(audio) {
     });
 
     volumeSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
+        if (!esIOS) audio.volume = e.target.value;
     });
 
     audio.addEventListener('ended', () => {
         nextBtn.click();
     });
 
-    // --- Lógica de la Barra de Progreso ---
+    // --- Lógica de la Barra de Progreso (COMPATIBLE CON IPHONE) ---
+    
+    let isDragging = false; // Variable para saber si estás tocando la barra
 
-    // 1. Cuando carga la canción, saber cuánto dura
     audio.addEventListener('loadedmetadata', () => {
         progressBar.max = audio.duration;
         totalTimeEl.innerText = formatearTiempo(audio.duration);
     });
 
-    // 2. Mientras se reproduce, mover la barra y actualizar el reloj
+    // Mientras reproduce, solo se mueve sola si NO tienes el dedo puesto
     audio.addEventListener('timeupdate', () => {
-        progressBar.value = audio.currentTime;
-        currentTimeEl.innerText = formatearTiempo(audio.currentTime);
+        if (!isDragging) {
+            progressBar.value = audio.currentTime;
+            currentTimeEl.innerText = formatearTiempo(audio.currentTime);
+        }
     });
 
-    // 3. Cuando el usuario arrastra o hace clic en la barra, cambiar de minuto
+    // Cuando pones el dedo y arrastras (Actualiza solo los números, no la música aún)
     progressBar.addEventListener('input', () => {
+        isDragging = true;
+        currentTimeEl.innerText = formatearTiempo(progressBar.value);
+    });
+
+    // Cuando LEVANTAS el dedo (Aquí recién cambiamos el minuto de la canción)
+    progressBar.addEventListener('change', () => {
         audio.currentTime = progressBar.value;
+        isDragging = false;
     });
 }
 
