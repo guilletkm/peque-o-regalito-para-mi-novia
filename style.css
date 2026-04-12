@@ -377,3 +377,34 @@ body {
 .close-btn:hover {
     color: var(--accent-color); 
 }
+
+/* ========================================== */
+/* --- AJUSTES PARA CELULAR (Responsivo) ---  */
+/* ========================================== */
+
+@media (max-width: 768px) {
+    /* 1. Da espacio "invisible" al final de la página para poder bajar más */
+    body {
+        padding-bottom: 130px; 
+    }
+
+    /* 2. Centra el reproductor y lo hace más delgado en móviles */
+    .music-player {
+        bottom: 15px;
+        right: 50%;
+        transform: translateX(50%);
+        width: 90%; 
+        min-width: auto;
+        padding: 10px 15px;
+    }
+
+    /* 3. Mantiene el centrado cuando lo tocas */
+    .music-player:hover {
+        transform: translateX(50%) translateY(-2px);
+    }
+    
+    /* 4. Achica un poco el slider de volumen para ganar espacio */
+    #volume-slider {
+        width: 40px;
+    }
+}
