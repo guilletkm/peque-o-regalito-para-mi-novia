@@ -106,7 +106,6 @@ function formatearTiempo(segundos) {
 
 if(audio) {
     audio.src = canciones[indiceActual];
-    // Solo aplicar volumen si NO es iOS
     if (!esIOS) audio.volume = volumeSlider.value;
 
     // --- Controles Básicos ---

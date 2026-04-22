@@ -253,7 +253,7 @@ body {
 }
 
 #volume-slider {
-    width: 60px; /* Volumen más pequeño al lado de los botones */
+    width: 60px; 
     height: 4px;
     accent-color: var(--accent-color); 
     cursor: pointer;
@@ -261,7 +261,7 @@ body {
 }
 
 .music-player:hover {
-    transform: translateY(-5px); /* Flota un poquito al pasar el mouse */
+    transform: translateY(-5px); 
 }
 
 .music-controls {
@@ -280,7 +280,7 @@ body {
 }
 
 .control-btn:hover {
-    color: #ff9cb3; /* Un rosa más intenso */
+    color: #ff9cb3; 
     transform: scale(1.1);
 }
 
@@ -292,7 +292,7 @@ body {
 #volume-slider {
     width: 90px;
     height: 4px;
-    accent-color: var(--accent-color); /* Lo pinta de rosa */
+    accent-color: var(--accent-color);
     cursor: pointer;
 }
 
